@@ -106,7 +106,8 @@ class wwhi_rip(object):
     def display_hosts(self):
         self._parsehosts()
         c=1 #used to display number next to output of host
-        del self.hosts['']
+        if self.hosts.has_key(''):
+            del self.hosts['']
         print ""
         for i in self.hosts.keys():
             print str(c)+": "+i
