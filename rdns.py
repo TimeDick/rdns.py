@@ -2,6 +2,7 @@
 #requires imagemagick for display command
 # version 1.0 - reverse ip with display catcha
 # version 1.1 - added killall display captcha
+#TODO: add some functionality as in this rdns script http://empth.i2p.to/pastebin/viewpaste.php?p=XEbKlgtF
 
 from urllib2 import Request, urlopen
 from urllib import urlencode
