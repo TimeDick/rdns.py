@@ -141,7 +141,7 @@ class wwhi_rip(object):
             del self.hosts['']
 
     def __call__(self, *args, **kwargs):
-        self.display_hosts(*args,**kwargs)
+        return self.display_hosts(*args,**kwargs)
         
 if __name__ == "__main__":
     print "http://whois.webhosting.info - Reverse IP Hosts Query Tool"
