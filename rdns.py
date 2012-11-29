@@ -84,13 +84,6 @@ class wwhi_rip(object):
         else:
             return html
 
-    def _isresults(self,html):
-        if html.find("IP Details - N/A.") >=0:
-            print "No Results..."
-            return False
-        else:
-            return True
-
     def _gethostscount(self,html):
         if html.find("IP hosts") >=0:
             self.hosts_count = int(html.split("IP hosts <b>")[1].split("</b>")[0])
