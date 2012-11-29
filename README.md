@@ -13,7 +13,7 @@ Here are a couple of bash function that will ease the process of getting ip addr
 
     #!/usr/bin/env bash
     function domainips(){
-        DOMAINIPS=`dig ${1:-google.com}|grep A|awk '{if( $5 != "" ){ print $5;}}'|grep "\."|xargs`
+        DOMAINIPS=`dig ${1:-google.com}|grep A|awk '{if( $5 != "" ){ print $5;}}'|grep --color=never "\."|xargs`
     }
     function rdnsdomain(){
         python rdns/rdns.py `domainips ${1:-google.com};echo $DOMAINIPS;`
