@@ -2,8 +2,9 @@
 #requires imagemagick for display command
 # version 1.0 - reverse ip with display catcha
 # version 1.1 - added killall display captcha
-#TODO: add some functionality as in this rdns script http://empth.i2p.to/pastebin/viewpaste.php?p=XEbKlgtF
+# version 1.2 - fixed output in preparation for gui
 
+#dig google.com|awk '{if( $5 != "" ){ print $5;}}'|grep "\."|xargs
 from urllib2 import Request, urlopen
 from urllib import urlencode
 import sys,os,subprocess
@@ -36,7 +37,6 @@ class wwhi_rip(object):
         self.pages_count=0 #pages count
         self.hosts={} #host to ip map
         
-        print "IP:",ip
         self.html.append(self._iscaptcha(self._q_page(1))) #get the first page
         if not self._isresults(self.html[0]): #are there any results?
             pass #sys.exit()
@@ -81,6 +81,7 @@ class wwhi_rip(object):
             self.cid=html.split("http://charting.webhosting.info/scripts/sec.php?ec=")[1].split("'></td>")[0]
             cap=self._showcaptcha() 
             if cap != None:
+                print "Terminating Image"
                 os.system("killall "+self.image_app)
                 return cap
             else:
@@ -91,7 +92,6 @@ class wwhi_rip(object):
     def _isresults(self,html):
         if html.find("IP Details - N/A.") >=0:
             print "No Results..."
-            #sys.exit()
             return False
         else:
             return True
@@ -104,15 +104,19 @@ class wwhi_rip(object):
                 self.pages_count+=1
             print "Hosts:",self.hosts_count
             #print "Pages Count:",self.pages_count
-    def display_hosts(self):
+    def display_hosts(self, show_index = True):
+        print "IP: %s"%self.ip
         self._parsehosts()
-        c=1 #used to display number next to output of host
-        if self.hosts.has_key(''):
-            del self.hosts['']
-        print ""
+
+        if show_index:
+            c=1 #used to display number next to output of host
+
         for i in self.hosts.keys():
-            print str(c)+": "+i
-            c+=1
+            if show_index:
+                print str(c)+": "+i
+                c+=1
+            else:
+                print i
             
         print ""
     def _parsehosts(self):
@@ -131,8 +135,12 @@ class wwhi_rip(object):
                 self.hosts[parser.urls[i].split("http://whois.webhosting.info/")[1][:-1]]=self.ip
             except:
                 pass
+
+        if self.hosts.has_key(''):
+            del self.hosts['']
+
     def __call__(self):
-        self.display_hosts()
+        self.display_hosts(False)
         
 if __name__ == "__main__":
     print "http://whois.webhosting.info - Reverse IP Hosts Query Tool"
