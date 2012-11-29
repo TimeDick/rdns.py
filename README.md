@@ -13,9 +13,9 @@ Here are a couple of bash function that will ease the process of getting ip addr
 
     #!/usr/bin/env bash
     function domainips(){
-        DOMAINIPS=`dig $1|awk '{if( $5 != "" ){ print $5;}}'|grep "\."|xargs`
+        DOMAINIPS=`dig ${1:-google.com}|grep A|awk '{if( $5 != "" ){ print $5;}}'|grep "\."|xargs`
     }
-    function rdns(){
-        python rdns/rdns.py `domainips ;echo $DOMAINIPS;`
+    function rdnsdomain(){
+        python rdns/rdns.py `domainips ${1:-google.com};echo $DOMAINIPS;`
     }
 powered by [http://whois.webhosting.info](http://whois.webhosting.info)
