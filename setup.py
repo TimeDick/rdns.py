@@ -45,7 +45,6 @@ setup(
     maintainer='Alex Goretoy',
     maintainer_email='alex@goretoy.com',
     url='http://github.com/gxela/rdns.py',
-    dependency_links=[],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Console',
@@ -58,6 +57,5 @@ setup(
         "Topic :: Internet :: Name Service (DNS)",
         "Topic :: Utilities"
     ],
-    packages=packages,
-    install_requires=read("requirements.txt").split("\n")
+    packages=packages
 )
