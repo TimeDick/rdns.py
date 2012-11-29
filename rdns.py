@@ -37,11 +37,6 @@ class wwhi_rip(object):
         self.pages_count=0 #pages count
         self.hosts={} #host to ip map
 
-        self.html.append(self._iscaptcha(self._q_page(1))) #get the first page
-        if not self._isresults(self.html[0]): #are there any results?
-            pass #sys.exit()
-        self._gethostscount(self.html[0])
-
     def _sendreq(self,req):
         u = None
         try:
@@ -103,21 +98,33 @@ class wwhi_rip(object):
             if self.hosts_count%self.hosts_per_page>0:
                 self.pages_count+=1
 
-    def display_hosts(self, show_index = True):
-        print "IP: %s"%self.ip
+    def display_hosts(self, show_output = False, show_index = True):
+        self.html.append(self._iscaptcha(self._q_page(1))) #get the first page
+
+        self._gethostscount(self.html[0])
+
+        if show_output:
+            print "IP: %s"%self.ip
+
         self._parsehosts()
 
         if show_index:
             c=1 #used to display number next to output of host
-        print "Hosts:",self.hosts_count
+
+        if show_output:
+            print "Hosts:",self.hosts_count
+
         for i in self.hosts.keys():
-            if show_index:
+            if show_index and show_output:
                 print str(c)+": "+i
                 c+=1
             else:
-                print i
+                if show_output:
+                    print i
 
-        print ""
+        if show_output:
+            print ""
+
         return list([self.ip, self.hosts_count, self.hosts])
 
     def _parsehosts(self):
@@ -151,5 +158,5 @@ if __name__ == "__main__":
         print ""
         for i in range(1,len(sys.argv)):
             ip=sys.argv[i]
-            wwhi_rip(ip).display_hosts()
+            wwhi_rip(ip)(True, True)
 
