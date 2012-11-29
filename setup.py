@@ -59,6 +59,5 @@ setup(
         "Topic :: Utilities"
     ],
     packages=packages,
-    include_package_data=True,
     install_requires=read("requirements.txt").split("\n")
 )
