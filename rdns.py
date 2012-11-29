@@ -36,12 +36,12 @@ class wwhi_rip(object):
         self.hosts_per_page=50 #hosts per page as per self.url
         self.pages_count=0 #pages count
         self.hosts={} #host to ip map
-        
+
         self.html.append(self._iscaptcha(self._q_page(1))) #get the first page
         if not self._isresults(self.html[0]): #are there any results?
             pass #sys.exit()
         self._gethostscount(self.html[0])
-        
+
     def _sendreq(self,req):
         u = None
         try:
@@ -59,7 +59,7 @@ class wwhi_rip(object):
         return u
     def _q_page(self,page):
         return self._sendreq(self.url+"?pi=%s&ob=SLD&oo=ASC"%(page))
-        
+
     def _postcaptcha(self):
         values = {"enck":self.cid,"srch_value":self.ip,"code":self.cvalue,"subSecurity":"Submit"}
         data = urlencode(values)
@@ -74,12 +74,12 @@ class wwhi_rip(object):
         if self.cvalue!="":
             return self._postcaptcha()
         else:
-            return None 
-        
+            return None
+
     def _iscaptcha(self,html):
         if html.find("http://charting.webhosting.info/scripts/sec.php?ec=")>0:
             self.cid=html.split("http://charting.webhosting.info/scripts/sec.php?ec=")[1].split("'></td>")[0]
-            cap=self._showcaptcha() 
+            cap=self._showcaptcha()
             if cap != None:
                 print "Terminating Image"
                 os.system("killall "+self.image_app)
@@ -95,30 +95,30 @@ class wwhi_rip(object):
             return False
         else:
             return True
-            
+
     def _gethostscount(self,html):
         if html.find("IP hosts") >=0:
             self.hosts_count = int(html.split("IP hosts <b>")[1].split("</b>")[0])
             self.pages_count=self.hosts_count/self.hosts_per_page
             if self.hosts_count%self.hosts_per_page>0:
                 self.pages_count+=1
-            print "Hosts:",self.hosts_count
-            #print "Pages Count:",self.pages_count
+
     def display_hosts(self, show_index = True):
         print "IP: %s"%self.ip
         self._parsehosts()
 
         if show_index:
             c=1 #used to display number next to output of host
-
+        print "Hosts:",self.hosts_count
         for i in self.hosts.keys():
             if show_index:
                 print str(c)+": "+i
                 c+=1
             else:
                 print i
-            
+
         print ""
+
     def _parsehosts(self):
         parser = URLLister()
         if self.pages_count>1:
@@ -128,7 +128,7 @@ class wwhi_rip(object):
             parser.feed(self.html[i])
 
         parser.close()
-        
+
         for i in range(len(parser.urls)):
             try:
                 #print str(i)+":",parser.urls[i].split("http://whois.webhosting.info/")[1][:-1]
@@ -139,8 +139,8 @@ class wwhi_rip(object):
         if self.hosts.has_key(''):
             del self.hosts['']
 
-    def __call__(self):
-        self.display_hosts(False)
+    def __call__(self, *args, **kwargs):
+        self.display_hosts(*args,**kwargs)
         
 if __name__ == "__main__":
     print "http://whois.webhosting.info - Reverse IP Hosts Query Tool"
