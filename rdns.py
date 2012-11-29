@@ -118,6 +118,7 @@ class wwhi_rip(object):
                 print i
 
         print ""
+        return list([self.ip, self.hosts_count, self.hosts])
 
     def _parsehosts(self):
         parser = URLLister()
